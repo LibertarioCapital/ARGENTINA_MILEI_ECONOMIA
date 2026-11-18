@@ -1,0 +1,1024 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Economía argentina bajo Javier Milei — Panel de datos (dic. 2023 – nov. 2026)</title>
+<style>
+:root{
+  --bg:#f4f6fa; --card:#ffffff; --ink:#14213d; --muted:#5d6b80; --line:#dfe5ee;
+  --teal:#0f9d8a; --red:#d94a5a; --amber:#e0a03c; --blue:#3b6fd4; --purple:#7b61c9;
+  --grey:#94a3b8; --shadow:0 8px 28px rgba(20,33,61,.07);
+  --nav-bg:rgba(255,255,255,.96); --nav-hover:#eef3fa;
+  --thead-bg:#f0f4f9; --thead-ink:#43536b; --row-hover:#f8fafc;
+  --note-bg:#fff9ec; --note-ink:#6b571f; --note-strong:#8a6a18;
+  --callout-bg:#eef5ff; --callout-ink:#26456f;
+  --up-bg:#e2f5f1; --up-ink:#0b7c6d; --down-bg:#fdeaed; --down-ink:#b22f41;
+  --neu-bg:#edf1f7; --neu-ink:#53627a;
+  --chart-grid:#e6ebf2; --chart-zero:#9aa9bd; --chart-point:#ffffff;
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --bg:#0d1424; --card:#16213a; --ink:#e8eef8; --muted:#a7b4ca; --line:#2a3a59;
+  --teal:#4fd1c5; --red:#ff7a8a; --amber:#f0b759; --blue:#7ea8ff; --purple:#b39cf5;
+  --grey:#8393ae; --shadow:0 8px 28px rgba(0,0,0,.28);
+  --nav-bg:rgba(13,20,36,.94); --nav-hover:#22314e;
+  --thead-bg:#1d2b47; --thead-ink:#c6d3e8; --row-hover:#1b2842;
+  --note-bg:#2b2617; --note-ink:#f0dcae; --note-strong:#ffd479;
+  --callout-bg:#162c4c; --callout-ink:#c8dcff;
+  --up-bg:#123c37; --up-ink:#7ee5d6; --down-bg:#4a202c; --down-ink:#ffb3bf;
+  --neu-bg:#26344e; --neu-ink:#c2cee2;
+  --chart-grid:#2a3a59; --chart-zero:#6e809f; --chart-point:#16213a;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);line-height:1.55;
+     font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+.hero{background:linear-gradient(135deg,#0e1d38 0%,#1b3a69 60%,#235080 100%);color:#fff;padding:46px 20px 42px}
+.hero-inner{max-width:1200px;margin:0 auto}
+.eyebrow{text-transform:uppercase;letter-spacing:.14em;font-size:.72rem;font-weight:700;color:#8fd3d0;margin:0 0 12px}
+h1{font-size:clamp(1.9rem,4vw,3rem);line-height:1.15;margin:0 0 12px;font-weight:750}
+.hero p.lead{max-width:900px;font-size:1.05rem;color:#d7e3f2;margin:0 0 20px}
+.hero-meta{display:flex;flex-wrap:wrap;gap:10px}
+.pill{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.22);border-radius:999px;padding:5px 12px;font-size:.78rem}
+nav{position:sticky;top:0;z-index:20;background:var(--nav-bg);backdrop-filter:blur(8px);
+    border-bottom:1px solid var(--line);box-shadow:0 2px 12px rgba(20,33,61,.04)}
+nav .nav-inner{max-width:1200px;margin:0 auto;padding:9px 16px;display:flex;gap:6px;overflow-x:auto;white-space:nowrap}
+nav a{color:var(--muted);text-decoration:none;font-size:.82rem;font-weight:600;padding:6px 10px;border-radius:8px}
+nav a:hover{background:var(--nav-hover);color:var(--ink)}
+.theme-btn{position:fixed;right:18px;bottom:18px;z-index:60;display:inline-flex;align-items:center;gap:8px;
+  background:var(--card);color:var(--ink);border:1px solid var(--line);border-radius:999px;
+  padding:9px 14px;box-shadow:0 6px 22px rgba(0,0,0,.18);cursor:pointer;
+  font:inherit;font-size:.82rem;font-weight:650}
+.theme-btn:hover{border-color:var(--blue)}
+.theme-btn:focus-visible{outline:3px solid var(--blue);outline-offset:2px}
+.theme-btn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.theme-btn .icon-sun{display:none}
+:root[data-theme="dark"] .theme-btn .icon-sun{display:block}
+:root[data-theme="dark"] .theme-btn .icon-moon{display:none}
+main{max-width:1200px;margin:0 auto;padding:28px 18px 60px}
+section{margin-bottom:44px;scroll-margin-top:64px}
+h2{font-size:1.5rem;margin:0 0 6px;letter-spacing:-.01em}
+h2 .num{color:var(--blue);font-variant-numeric:tabular-nums;margin-right:8px}
+h3{font-size:1.05rem;margin:0 0 10px}
+p.desc{color:var(--muted);max-width:900px;margin:0 0 18px;font-size:.95rem}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(185px,1fr));gap:12px;margin-bottom:20px}
+.kpi{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.kpi .label{font-size:.72rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);font-weight:700}
+.kpi .value{font-size:1.7rem;font-weight:750;line-height:1.2;margin:7px 0 4px;font-variant-numeric:tabular-nums}
+.kpi .sub{font-size:.76rem;color:var(--muted)}
+.pos{color:var(--teal)} .neg{color:var(--red)} .warn{color:var(--amber)}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(430px,100%),1fr));gap:18px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;box-shadow:var(--shadow);margin-bottom:18px}
+.card h3{margin-bottom:4px}
+.card .subtitle{font-size:.8rem;color:var(--muted);margin:0 0 12px}
+.chart{width:100%;overflow:hidden}
+.chart svg{width:100%;height:auto;display:block}
+.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.78rem;color:var(--muted);margin-top:8px;padding-left:2px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+.dot{width:10px;height:10px;border-radius:3px;display:inline-block;flex:none}
+.source{font-size:.75rem;color:var(--muted);margin-top:12px;padding-top:9px;border-top:1px dashed var(--line)}
+.source a{color:var(--blue)}
+.note{background:var(--note-bg);border-left:4px solid var(--amber);border-radius:0 10px 10px 0;padding:11px 14px;margin:14px 0;font-size:.86rem;color:var(--note-ink)}
+.note strong{color:var(--note-strong)}
+.callout{background:var(--callout-bg);border-left:4px solid var(--blue);border-radius:0 10px 10px 0;padding:11px 14px;margin:14px 0;font-size:.88rem;color:var(--callout-ink)}
+.tbl-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:.87rem;min-width:430px}
+th,td{padding:8px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+thead th{background:var(--thead-bg);font-weight:700;font-size:.78rem;text-transform:uppercase;letter-spacing:.03em;color:var(--thead-ink);white-space:nowrap}
+tbody tr:hover{background:var(--row-hover)}
+td.num,th.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.badge{display:inline-block;border-radius:999px;padding:2px 8px;font-size:.7rem;font-weight:700}
+.b-up{background:var(--up-bg);color:var(--up-ink)} .b-down{background:var(--down-bg);color:var(--down-ink)} .b-neu{background:var(--neu-bg);color:var(--neu-ink)}
+ul.clean{margin:8px 0 0;padding-left:20px} ul.clean li{margin-bottom:8px}
+.foot-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:14px}
+footer{border-top:1px solid var(--line);background:var(--card);padding:22px 18px 34px;color:var(--muted);font-size:.82rem}
+footer .inner{max-width:1200px;margin:0 auto}
+a{color:var(--blue)}
+@media (max-width:700px){
+  .card{padding:14px} .kpi .value{font-size:1.45rem}
+  h2{font-size:1.3rem}
+  .theme-btn .theme-label{display:none}
+  .theme-btn{padding:10px;right:12px;bottom:12px}
+  footer{padding-bottom:76px}
+}
+@media print{
+  nav,.theme-btn{display:none} body{background:#fff} .card,.kpi{box-shadow:none;break-inside:avoid} section{break-inside:avoid}
+}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <p class="eyebrow">Panel interactivo · datos y visualizaciones</p>
+    <h1>Economía argentina bajo Javier Milei</h1>
+    <p class="lead">Síntesis visual de los dos artículos reunidos en esta carpeta: un estudio de alcance metodológico y un estudio integral con énfasis en el deterioro microeconómico. Inflación, fiscal, actividad, pobreza, empleo, sector externo, consumo y proyecciones, con las discrepancias entre fuentes señaladas.</p>
+    <div class="hero-meta">
+      <span class="pill">Fecha de corte: 16 de noviembre de 2026</span>
+      <span class="pill">Período analizado: dic. 2023 – nov. 2026</span>
+      <span class="pill">2 artículos · INDEC · Hacienda · BCRA · FMI · OPC · IAE · CAME · CEPA · UCA</span>
+    </div>
+  </div>
+</header>
+
+<nav>
+  <div class="nav-inner">
+    <a href="#resumen">Resumen</a>
+    <a href="#inflacion">Inflación</a>
+    <a href="#fiscal">Fiscal</a>
+    <a href="#actividad">Actividad</a>
+    <a href="#pobreza">Pobreza</a>
+    <a href="#empleo">Empleo e ingresos</a>
+    <a href="#externo">Sector externo</a>
+    <a href="#micro">Microeconomía</a>
+    <a href="#proyecciones">Proyecciones</a>
+    <a href="#balance">Balance y fuentes</a>
+  </div>
+</nav>
+
+<main>
+
+<!-- ============ RESUMEN ============ -->
+<section id="resumen">
+  <h2><span class="num">01</span>Resumen ejecutivo</h2>
+  <p class="desc">La conclusión compartida es de una <strong>estabilización significativa, socialmente costosa y todavía incompleta</strong>: la desinflación y el equilibrio fiscal son verificables, pero la inversión, el empleo formal y los ingresos no acompañaron de modo parejo. El primer artículo adopta una postura metodológicamente cautelosa; el segundo enfatiza los deterioros de 2026 y las disputas de medición.</p>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Inflación interanual</div><div class="value neg">33,1%</div><div class="sub">Oct. 2026 · desde 211,4% en 2023</div></div>
+    <div class="kpi"><div class="label">Resultado primario SPN</div><div class="value pos">+1,4%</div><div class="sub">% del PIB · ene.–oct. 2026, caja</div></div>
+    <div class="kpi"><div class="label">Pobreza (personas)</div><div class="value warn">32,3%</div><div class="sub">1.er sem. 2026 · +4,1 p.p. vs. 2.º sem. 2025</div></div>
+    <div class="kpi"><div class="label">PIB 2.º trim. 2026</div><div class="value neg">−0,6%</div><div class="sub">Desestacionalizado · +2,0% interanual</div></div>
+    <div class="kpi"><div class="label">Riesgo país</div><div class="value neg">830–939</div><div class="sub">Puntos básicos en nov. 2026 · mín. 402</div></div>
+    <div class="kpi"><div class="label">Reservas brutas</div><div class="value pos">USD 49.464 M</div><div class="sub">Nov. 2026 · +136% en tres años</div></div>
+  </div>
+
+  <div class="card">
+    <h3>Matriz de balance: avance verificable, costo y evaluación</h3>
+    <p class="subtitle">Síntesis del primer artículo (fecha de corte 16/11/2026).</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Dimensión</th><th>Avance verificable</th><th>Costo o límite</th><th>Evaluación</th></tr></thead>
+      <tbody>
+        <tr><td><strong>Inflación</strong></td><td>Descenso muy pronunciado desde el inicio de la gestión.</td><td>Mensual de octubre: 2,2%; interanual: 33,1%, todavía elevada.</td><td><span class="badge b-up">Logro claro</span> estabilización incompleta.</td></tr>
+        <tr><td><strong>Finanzas públicas</strong></td><td>Superávit financiero del SPN de 0,3% del PIB en 2024 y 0,2% en 2025.</td><td>Cayó el gasto de capital real y perdieron poder adquisitivo las jubilaciones mínimas con bono (ene.–sep. 2026).</td><td><span class="badge b-neu">Logro fiscal</span> composición discutible.</td></tr>
+        <tr><td><strong>Pobreza</strong></td><td>32,3% en el 1.er sem. de 2026 vs. 41,7% en el 2.º sem. de 2023.</td><td>Subió desde 28,2% en el 2.º sem. de 2025.</td><td><span class="badge b-neu">Mejora acumulada</span> reversión parcial reciente.</td></tr>
+        <tr><td><strong>Actividad</strong></td><td>Rebote anual en 2025 tras la caída de 2024.</td><td>PIB 2.º trim. 2026: −0,6% trimestral, aunque +2,0% interanual.</td><td><span class="badge b-neu">Recuperación</span> no consolidada.</td></tr>
+        <tr><td><strong>Trabajo</strong></td><td>Tasa de empleo de 44,5% a 45,0% entre segundos trimestres.</td><td>Informalidad de 43,2% a 45,0% de los ocupados.</td><td><span class="badge b-down">Alerta</span> más ocupación ≠ mejor empleo.</td></tr>
+        <tr><td><strong>Inversión</strong></td><td>RIGI vigente y proyectos aprobados, vinculados a recursos naturales.</td><td>Aprobación, anuncio y desembolso son categorías distintas; inversión agregada débil.</td><td><span class="badge b-neu">Potencial</span> materialización desigual.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: «Economía argentina durante el gobierno de Javier Milei», sección <em>Alcance y síntesis</em>.</div>
+  </div>
+
+  <div class="note"><strong>Lectura de fuentes.</strong> Cuando los artículos difieren, se conserva la cifra de cada uno y se indica la discrepancia: PIB 2025 (+4,4% en el artículo 1 vs. +4,5% en el artículo 2 y en el WEO), inflación 2025 (31,5% vs. 31,6%), informalidad (45,0% en la serie EPH tradicional vs. 44,2% en la serie renovada) y saldo fiscal de 2026 (ene.–sep. vs. ene.–oct.). No se empalman series no homologadas.</div>
+</section>
+
+<!-- ============ INFLACION ============ -->
+<section id="inflacion">
+  <h2><span class="num">02</span>Inflación: gran descenso, piso persistente</h2>
+  <p class="desc">La variación interanual cayó de 211,4% a alrededor de 33%, pero la inflación mensual se estancó en torno al 2% durante 2026. Entre noviembre de 2023 y octubre de 2026 el IPC acumuló <strong>+354,0%</strong>: desinflar no revierte el nivel de precios ya alcanzado.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Mensual vs. interanual</h3>
+      <p class="subtitle">Barras: variación mensual (eje izq.). Línea: variación interanual en los meses informados (eje der.).</p>
+      <div class="chart" id="chart-inflacion"></div>
+      <div class="source">Fuente: artículos 1 y 2, a partir de INDEC / IPC. La interanual no se presenta para agosto y septiembre en la tabla del artículo 1.</div>
+    </div>
+    <div class="card">
+      <h3>Metas presupuestarias vs. resultado</h3>
+      <p class="subtitle">La inflación superó la meta oficial en 2025 y también en 2026; las bases son distintas (punta a punta vs. acumulado).</p>
+      <div class="chart" id="chart-metas"></div>
+      <div class="source">Fuente: artículo 2 (Chequeado / presupuesto); observado 2025: 31,5% (art. 1) / 31,6% (art. 2); 2026: 26,3% acumulado ene.–oct.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Series publicadas</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Período</th><th class="num">Inflación mensual</th><th class="num">Inflación interanual</th><th>Comentario</th></tr></thead>
+      <tbody>
+        <tr><td>Noviembre de 2023</td><td class="num">12,8%</td><td class="num">—</td><td>Inercia previa a la asunción.</td></tr>
+        <tr><td>Diciembre de 2023</td><td class="num">25,5%</td><td class="num">211,4%</td><td>Combina inercia y corrección inicial.</td></tr>
+        <tr><td>Diciembre de 2024</td><td class="num">2,7%</td><td class="num">117,8%</td><td>Desinflación rápida.</td></tr>
+        <tr><td>Diciembre de 2025</td><td class="num">2,8%</td><td class="num">31,5% / 31,6%</td><td>Discrepancia entre artículos.</td></tr>
+        <tr><td>Agosto de 2026</td><td class="num">1,7%</td><td class="num">—</td><td>Mínimo reciente del período.</td></tr>
+        <tr><td>Septiembre de 2026</td><td class="num">1,9%</td><td class="num">—</td><td>REM esperaba 1,8%.</td></tr>
+        <tr><td>Octubre de 2026</td><td class="num">2,2%</td><td class="num">33,1%</td><td>Aceleración mensual con interanual aún descendente.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: artículo 1, sección <em>Inflación</em>; artículo 2, sección 3.2. La tasa interanual depende también del mes que sale de la comparación.</div>
+  </div>
+
+  <div class="callout"><strong>Precio relativo y competitividad.</strong> El dólar mayorista subió solo 6,22% entre enero y octubre de 2026 frente a una inflación de 26,3%: la apreciación real del peso redujo el margen de los bienes transables. La inflación núcleo de octubre cedió a 1,5%, pero tarifas, alquileres y precios estacionales sostuvieron el índice general (artículo 2).</div>
+</section>
+
+<!-- ============ FISCAL ============ -->
+<section id="fiscal">
+  <h2><span class="num">03</span>Política fiscal: superávit sostenido, composición discutida</h2>
+  <p class="desc">El Sector Público Nacional pasó de un déficit primario de 2,9% del PIB y financiero de 6,1% en 2023 a superávits en 2024, 2025 y 2026. La discusión se centra en qué se recortó y en cómo se registra el costo de intereses.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Resultados del SPN (% del PIB)</h3>
+      <p class="subtitle">Criterio de caja. 2026: acumulado ene.–oct. (artículo 2).</p>
+      <div class="chart" id="chart-fiscal"></div>
+      <div class="legend" id="legend-fiscal"></div>
+      <div class="source">Fuente: artículo 2 (Hacienda / Infobae); artículo 1 reporta +1,2% primario y +0,3% financiero para ene.–sep. 2026. El resultado primario excluye intereses; el financiero los descuenta.</div>
+    </div>
+    <div class="card">
+      <h3>Composición del ajuste (ene.–sep. 2026)</h3>
+      <p class="subtitle">Variación real frente a igual período de 2025, ejecución de la Administración Nacional.</p>
+      <div class="chart" id="chart-gasto"></div>
+      <div class="source">Fuente: artículo 1, OPC. Estas categorías de gasto devengado no se suman mecánicamente al resultado de caja del SPN.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Evolución y montos</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Período</th><th class="num">Primario / PIB</th><th class="num">Financiero / PIB</th><th>Monto (según fuente)</th><th>Alcance</th></tr></thead>
+      <tbody>
+        <tr><td>2023</td><td class="num neg">−2,9%</td><td class="num neg">−6,1%</td><td>Déficit cubierto con emisión monetaria</td><td>Referencia del diagnóstico del FMI.</td></tr>
+        <tr><td>2024</td><td class="num pos">+1,8%</td><td class="num pos">+0,3%</td><td>—</td><td>Año completo, SPN.</td></tr>
+        <tr><td>2025</td><td class="num pos">+1,4%</td><td class="num pos">+0,2%</td><td>ARS 11,7 bn / 1,45 bn (intereses: ARS 10,32 bn)</td><td>Año completo, SPN.</td></tr>
+        <tr><td>2026 (ene.–oct.)</td><td class="num pos">+1,4%</td><td class="num pos">+0,4%</td><td>ARS 15,6 bn / 4,89 bn; octubre: 1,93 / 1,58 bn</td><td>Acumulado parcial, no cierre anual.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: artículos 1 y 2 (Hacienda). Para ene.–sep. 2026 el artículo 1 indica ≈ +1,2% y ≈ +0,3%.</div>
+  </div>
+
+  <div class="note"><strong>Debate sobre la calidad del superávit.</strong> El artículo 2 señala que los intereses capitalizados en LECAP (ARS 18,63 bn entre ene.–ago. 2026) diferirían el registro del costo: el CEPA estima un déficit devengado de ARS 16,29 bn en ocho meses frente al superávit de caja de ARS 2,34 bn. También señala ingresos extraordinarios por privatizaciones (USD 1.081 M hasta junio) y una caída real del 13,8% del superávit primario en diez meses según IARAF al excluirlos. Estas son <em>interpretaciones</em>, no datos fiscales oficiales homologados.</div>
+</section>
+
+<!-- ============ ACTIVIDAD ============ -->
+<section id="actividad">
+  <h2><span class="num">04</span>Actividad: rebote en 2025, estancamiento en 2026</h2>
+  <p class="desc">Encadenando las tasas, el PIB de 2025 quedó 2,6% por encima del de 2023 según la serie del artículo 1. Sin embargo, el segundo trimestre de 2026 mostró una contracción desestacionalizada y la demanda interna se rezagó frente a las exportaciones.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>PIB anual y proyecciones</h3>
+      <p class="subtitle">Variación anual real. Azul: observado · ámbar: proyección.</p>
+      <div class="chart" id="chart-pib"></div>
+      <div class="source">Fuente: artículos 1 y 2; serie financiera (2025: +4,4% / +4,5%) y WEO oct. 2026 (−1,4% en 2024, +4,5% en 2025). No se mezclan pares de series para calcular una tasa acumulada.</div>
+    </div>
+    <div class="card">
+      <h3>Demanda: 2.º trimestre de 2026</h3>
+      <p class="subtitle">Variación interanual de los componentes.</p>
+      <div class="chart" id="chart-demanda"></div>
+      <div class="source">Fuente: artículo 2, sección 3.3, a partir de cuentas nacionales. Formación bruta de capital fijo = 15,1% del PIB a precios corrientes.</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Indicadores de actividad recientes</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Indicador</th><th>Período</th><th class="num">Dato</th><th>Lectura</th></tr></thead>
+        <tbody>
+          <tr><td>PIB real interanual</td><td>2.º trim. 2026</td><td class="num pos">+2,0%</td><td>Mayor nivel que un año antes.</td></tr>
+          <tr><td>PIB trimestral desestacionalizado</td><td>2.º trim. 2026</td><td class="num neg">−0,6%</td><td>Retroceso frente al trimestre anterior.</td></tr>
+          <tr><td>EMAE interanual</td><td>Ago. 2026</td><td class="num neg">−1,7%</td><td>Debilidad reciente.</td></tr>
+          <tr><td>EMAE mensual desestacionalizado</td><td>Ago. 2026</td><td class="num">+0,1%</td><td>Prácticamente estancado.</td></tr>
+          <tr><td>Producción industrial interanual</td><td>Sep. 2026</td><td class="num neg">−1,8%</td><td>Industria manufacturera rezagada.</td></tr>
+          <tr><td>Producción industrial mensual</td><td>Sep. 2026</td><td class="num pos">+0,7%</td><td>Mejora mensual compatible con caída interanual.</td></tr>
+          <tr><td>Construcción (ISAC) interanual</td><td>Ago. 2026</td><td class="num neg">−4,4%</td><td>Sector frágil.</td></tr>
+          <tr><td>Utilización de capacidad instalada</td><td>Sep. 2026</td><td class="num">60,1%</td><td>Frente a 61,4% en sep. 2025: capacidad ociosa elevada.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="source">Fuente: artículo 1, sección <em>Actividad productiva</em> (INDEC); artículo 2, sección 3.3.</div>
+    </div>
+    <div class="card">
+      <h3>Variaciones interanuales seleccionadas</h3>
+      <p class="subtitle">Últimos meses disponibles; la capacidad instalada se expresa en puntos porcentuales.</p>
+      <div class="chart" id="chart-actividad"></div>
+      <div class="source">Fuente: artículos 1 y 2. PIB 2.º trim.; EMAE ago.; industria sep.; construcción ago.; capacidad sep. 2026 vs. sep. 2025.</div>
+    </div>
+  </div>
+
+  <div class="callout"><strong>Economía a dos velocidades.</strong> Energía, minería y agro muestran mayor dinamismo que las actividades intensivas en mercado interno y empleo (IAE). El crecimiento exportador no garantiza por sí solo una recuperación del salario y del empleo en todas las regiones.</div>
+</section>
+
+<!-- ============ POBREZA ============ -->
+<section id="pobreza">
+  <h2><span class="num">05</span>Pobreza e indigencia: mejora acumulada, reversión reciente</h2>
+  <p class="desc">La pobreza bajó 9,4 puntos porcentuales entre el 2.º semestre de 2023 y el 1.º de 2026, pero subió 4,1 puntos frente al semestre inmediato anterior. Ambas afirmaciones son compatibles y corresponden a la serie oficial de los 31 aglomerados urbanos.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Evolución semestral (INDEC)</h3>
+      <p class="subtitle">Porcentaje de personas por debajo de la línea de pobreza / indigencia.</p>
+      <div class="chart" id="chart-pobreza"></div>
+      <div class="legend" id="legend-pobreza"></div>
+      <div class="source">Fuente: artículo 1, sección <em>Pobreza, indigencia y desigualdad</em>; artículo 2, sección 4.2. El dato del 1.er sem. 2026 es provisorio.</div>
+    </div>
+    <div class="card">
+      <h3>Disputa de medición: 2.º trimestre</h3>
+      <p class="subtitle">Oficial trimestral vs. estimaciones de la UCA con canasta 2017/18.</p>
+      <div class="chart" id="chart-uca"></div>
+      <div class="legend" id="legend-uca"></div>
+      <div class="source">Fuente: artículo 2 (Observatorio de la Deuda Social Argentina, UCA). Las variantes UCA no reemplazan al índice oficial ni comparan directamente con diciembre de 2023.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Serie oficial y desagregación</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Semestre</th><th class="num">Pobreza, personas</th><th class="num">Indigencia, personas</th></tr></thead>
+      <tbody>
+        <tr><td>2.º semestre de 2023</td><td class="num">41,7%</td><td class="num">11,9%</td></tr>
+        <tr><td>1.er semestre de 2024</td><td class="num neg">52,9%</td><td class="num neg">18,1%</td></tr>
+        <tr><td>2.º semestre de 2024</td><td class="num">38,1%</td><td class="num">8,2%</td></tr>
+        <tr><td>1.er semestre de 2025</td><td class="num">31,6%</td><td class="num">6,9%</td></tr>
+        <tr><td>2.º semestre de 2025</td><td class="num pos">28,2%</td><td class="num pos">6,3%</td></tr>
+        <tr><td>1.er semestre de 2026</td><td class="num warn">32,3%</td><td class="num warn">7,5%</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: INDEC, citado en ambos artículos. Cobertura: 31 aglomerados de la EPH; en el 1.er sem. 2026, 9,729 millones de pobres y 2,249 millones de indigentes.</div>
+  </div>
+
+  <div class="kpis">
+    <div class="kpi"><div class="label">Pobreza infantil (0–14 años)</div><div class="value warn">44,5%</div><div class="sub">1.er semestre de 2026</div></div>
+    <div class="kpi"><div class="label">NEA vs. Patagonia</div><div class="value">41,5% / 28,4%</div><div class="sub">Aglomerados relevados, 1.er sem. 2026</div></div>
+    <div class="kpi"><div class="label">Brecha de ingresos</div><div class="value">35,9%</div><div class="sub">Hogares pobres respecto de la CBT</div></div>
+    <div class="kpi"><div class="label">Gini</div><div class="value">0,428</div><div class="sub">2.º trim. 2026 vs. 0,424 un año antes</div></div>
+  </div>
+
+  <div class="note"><strong>Canasta y sensibilidad.</strong> En el 1.er semestre de 2026 la CBT subió 34,7% interanual mientras el ingreso familiar creció cerca de 25%; un hogar pobre promedio tuvo ingresos de ARS 922.755 frente a una CBT de ARS 1.440.395. El artículo 2 atribuye la controversia a mantener la estructura de consumo 2004/05 en lugar de la encuesta 2017/18 y cita valores alternativos de 37,5% (V1) y 42,4% (V2) para el 2.º trimestre de 2026.</div>
+</section>
+
+<!-- ============ EMPLEO ============ -->
+<section id="empleo">
+  <h2><span class="num">06</span>Empleo, salarios y jubilaciones</h2>
+  <p class="desc">La tasa de empleo mejoró interanualmente, pero también aumentó la informalidad. Los datos salariales muestran trayectorias distintas según el segmento y la base de comparación, y las jubilaciones mínimas con bono son el caso más deteriorado.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Mercado laboral: 2.º trimestre</h3>
+      <p class="subtitle">Comparación entre 2025 y 2026, en %. Los universos difieren entre indicadores.</p>
+      <div class="chart" id="chart-empleo"></div>
+      <div class="legend" id="legend-empleo"></div>
+      <div class="source">Fuente: artículo 1 (INDEC, <em>Indec Informa</em> sep. 2026). El artículo 2 reporta 44,2% de informalidad en la serie renovada de la EPH; no es la misma serie que el 45,0% del artículo 1.</div>
+    </div>
+    <div class="card">
+      <h3>Salarios de septiembre de 2026</h3>
+      <p class="subtitle">Variación mensual nominal por segmento; IPC del mes = 1,9%.</p>
+      <div class="chart" id="chart-salarios"></div>
+      <div class="source">Fuente: INDEC, citado en ambos artículos. El agregado salarial perdió poder de compra en el mes; el privado registrado acompañó a precios.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Indicadores laborales</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Indicador</th><th class="num">2.º trim. 2025</th><th class="num">2.º trim. 2026</th><th>Lectura</th></tr></thead>
+      <tbody>
+        <tr><td>Actividad / población de referencia</td><td class="num">48,1%</td><td class="num">48,9%</td><td>Aumentó la participación.</td></tr>
+        <tr><td>Empleo / población de referencia</td><td class="num">44,5%</td><td class="num">45,0%</td><td>Aumentó la proporción ocupada.</td></tr>
+        <tr><td>Desempleo / PEA</td><td class="num">7,6%</td><td class="num">7,9%</td><td>La ocupación no absorbió toda la mayor participación.</td></tr>
+        <tr><td>Informalidad / ocupados</td><td class="num">43,2%</td><td class="num neg">45,0%</td><td>Peor calidad y protección del empleo.</td></tr>
+        <tr><td>Subocupación / PEA</td><td class="num">11,6%</td><td class="num">11,5%</td><td>Cambio pequeño.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: artículo 1. Desempleo: 5,7% en el 4.º trim. 2023 y 7,9% en el 2.º trim. 2026; comparando segundos trimestres: 6,2% (2023), 7,6% (2024), 7,6% (2025), 7,9% (2026).</div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Poder adquisitivo: bases de comparación</h3>
+      <p class="subtitle">Cada barra usa su propio período inicial; no son homogéneas.</p>
+      <div class="chart" id="chart-ingresos"></div>
+      <div class="note" style="margin-bottom:0">El salario mínimo es el piso legal (ARS 146.000 en nov. 2023 → ARS 376.600 en ago. 2026): su caída real del 40,8% no representa a todos los salarios. La jubilación mínima con bono acumula −47,3% desde marzo de 2024 según el artículo 2, mientras la OPC mide −5,1% real solo en ene.–sep. 2026.</div>
+      <div class="source">Fuente: artículos 1 y 2 (INDEC, OPC, CEPA). RIPTE sep. 2026: ARS 2.022.244 (+30,31% interanual), por debajo del 33,1% de inflación interanual.</div>
+    </div>
+    <div class="card">
+      <h3>Empleo formal y morosidad: señales de 2026</h3>
+      <ul class="clean">
+        <li><strong>−119.641</strong> puestos de trabajo registrados con aportes en el 1.er semestre de 2026 (SIPA, según prensa citada en el artículo 2); caída del 7,3% interanual en el empleo privado de Chubut vs. −2,1% nacional.</li>
+        <li><strong>−7,0%</strong> salario real registrado desde fines de 2023 con IPC oficial; <strong>−17,6%</strong> con canasta de consumo actualizada (CEPA).</li>
+        <li><strong>ARS 70.000</strong> bono jubilatorio congelado desde marzo de 2024; haber mínimo con bono −47,3% real, jubilación media −12,7% real desde noviembre de 2023.</li>
+        <li><strong>18.692</strong> empresas dejaron de declarar empleo y <strong>14.405</strong> nuevas empleadoras en el 1.er trim. 2026: saldo −4.287, cifras provisorias que no equivalen a quiebras (IAE/OEDE).</li>
+      </ul>
+      <div class="source">Fuente: artículos 1 y 2. Las bajas administrativas no deben confundirse con cierres definitivos ni las incorporaciones a incentivos con empleo neto adicional.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ EXTERNO ============ -->
+<section id="externo">
+  <h2><span class="num">07</span>Sector externo: superávit energético y financiamiento todavía cerrado</h2>
+  <p class="desc">El frente comercial es el cambio estructural más favorable: 34 meses consecutivos de superávit y un récord de USD 9.427 millones en el saldo energético de los primeros nueve meses de 2026. Pero las reservas brutas siguen siendo bajas en relación al PIB y el riesgo país se duplicó hacia noviembre.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Reservas internacionales brutas del BCRA</h3>
+      <p class="subtitle">Millones de USD, a fechas indicadas.</p>
+      <div class="chart" id="chart-reservas"></div>
+      <div class="source">Fuente: artículo 2. El artículo 1 informa USD 46.092 M al cierre de septiembre de 2026, con caída mensual de USD 2.167 M. No son reservas netas de libre disponibilidad.</div>
+    </div>
+    <div class="card">
+      <h3>Riesgo país EMBI+ (puntos básicos)</h3>
+      <p class="subtitle">Mínimo de 2026, pico del 6 de noviembre y cierre del período.</p>
+      <div class="chart" id="chart-riesgo"></div>
+      <div class="source">Fuente: artículo 2. El regreso al crédito voluntario suele exigir 400–500 puntos básicos; vencimientos externos de USD 21.300–22.615 M en 2027.</div>
+    </div>
+  </div>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Superávit comercial energético</h3>
+      <p class="subtitle">Millones de USD, acumulados anuales salvo 2026 (ene.–sep.).</p>
+      <div class="chart" id="chart-energia"></div>
+      <div class="source">Fuente: artículo 2. En 2026 representó el 44,5% del saldo comercial total; las exportaciones de petróleo crudo crecieron ~58% y desplazaron a la harina de soja como principal producto.</div>
+    </div>
+    <div class="card">
+      <h3>Promesas vs. materialización (RIGI)</h3>
+      <div class="tbl-wrap"><table>
+        <thead><tr><th>Indicador</th><th>Valor</th><th>Límite interpretativo</th></tr></thead>
+        <tbody>
+          <tr><td>Proyectos aprobados</td><td>USD 49.700 M (Chequeado, oct. 2026)</td><td>El FMI elevó el monto a más de USD 76.000 M al 27/10/2026.</td></tr>
+          <tr><td>Ingresos netos de divisas</td><td>USD 762 M hasta el 1.er trim. 2026</td><td>USD 1.205 M de ingresos brutos menos USD 452 M de salidas.</td></tr>
+          <tr><td>Proyección oficial</td><td>Más de USD 6.000 M/anual entre 2026 y 2028</td><td>Proyección, no dato observado.</td></tr>
+          <tr><td>Reservas y Tesoro</td><td Depósitos en USD del Tesoro en el BCRA por debajo de USD 200 M</td><td>Frente a USD 3.700 M previstos para fines de 2026.</td></tr>
+        </tbody>
+      </table></div>
+      <div class="source">Fuente: artículos 1 y 2. Aprobación, anuncio y desembolso efectivo son categorías distintas.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Indicadores externos y cambiarios</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Variable</th><th>2023</th><th>2024</th><th>2025</th><th>2026 (último dato)</th></tr></thead>
+      <tbody>
+        <tr><td>Balanza comercial de bienes (USD M)</td><td>n/d homogénea</td><td>Superávit mensual continuo</td><td>+11.286</td><td>+16.080 ene.–jul.; +2.187 ago.; +2.976 sep.</td></tr>
+        <tr><td>Reservas brutas BCRA (USD M)</td><td>20.905 (11/11)</td><td>29.859 (11/11)</td><td>41.015 (05/11)</td><td>49.464–49.597 (13–16/11)</td></tr>
+        <tr><td>Riesgo país EMBI+ (pb)</td><td>2.495 (13/11)</td><td>Descenso fuerte</td><td>616 (13/11)</td><td>Mín. 402; pico 939 (06/11); 830–850+ (13–16/11)</td></tr>
+        <tr><td>Tipo de cambio oficial / paralelo (ARS/USD)</td><td>364 / ~1.000</td><td>Crawling peg</td><td>Salida del cepo en abril (1.097 → 1.230)</td><td>Mayorista 1.543–1.551; BNA 1.575; blue 1.600</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: artículo 2, sección 3. El artículo 1 advierte que no empalma su serie de reservas con el informe del BCRA por no poder homologar definiciones.</div>
+  </div>
+</section>
+
+<!-- ============ MICRO ============ -->
+<section id="micro">
+  <h2><span class="num">08</span>Microeconomía: consumo, comercios y deuda de los hogares</h2>
+  <p class="desc">Las ventas pyme minoristas cayeron 1,6% interanual real en octubre de 2026 y acumularon −2,0% en el año, pese a una mejora mensual de 0,3%. Alimentos y farmacia, rubros esenciales, se encuentran entre los más rezagados.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Ventas minoristas pyme por rubro</h3>
+      <p class="subtitle">Octubre de 2026 vs. octubre de 2025, variación real.</p>
+      <div class="chart" id="chart-came"></div>
+      <div class="source">Fuente: artículo 1 (CAME). Universo de comercios pyme: no sustituye a las cuentas nacionales.</div>
+    </div>
+    <div class="card">
+      <h3>Morosidad crediticia de familias</h3>
+      <p class="subtitle">% irregular: oct.–nov. 2024 vs. sep. 2026.</p>
+      <div class="chart" id="chart-morosidad"></div>
+      <div class="legend" id="legend-morosidad"></div>
+      <div class="source">Fuente: artículo 2 (CEPA). La morosidad consolidada fue de 18% en julio de 2026 según Eco Go / Universidad Austral; 6 millones de personas con atrasos (37,9% de la PEA).</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Quiénes parecen mejor y peor posicionados</h3>
+    <p class="subtitle">Matriz de exposición económica del artículo 1: no estima ganancias o pérdidas individuales.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Grupo</th><th>Oportunidad o mejora</th><th>Vulnerabilidad</th></tr></thead>
+      <tbody>
+        <tr><td>Exportadores de energía, minería y agro</td><td>Demanda externa y proyectos de inversión.</td><td>Precios internacionales, costos locales y plazos de maduración.</td></tr>
+        <tr><td>Pymes orientadas al mercado interno</td><td>Menor inflación puede facilitar presupuestos y reposición.</td><td>Ventas débiles, financiamiento y dificultad para trasladar costos.</td></tr>
+        <tr><td>Trabajadores privados registrados</td><td>Mayor negociación y protección que en empleos informales.</td><td>La recuperación salarial no garantiza estabilidad del puesto.</td></tr>
+        <tr><td>Informales y perceptores del salario mínimo</td><td>Posible beneficio de una estabilización sostenida.</td><td>Menor protección y erosión del piso salarial real.</td></tr>
+        <tr><td>Jubilados de la mínima con bono</td><td>La movilidad del haber amortigua parte de la inflación.</td><td>Bono congelado y pérdida real del ingreso total.</td></tr>
+        <tr><td>Hogares con niños y bajos ingresos</td><td>Transferencias pueden amortiguar el ajuste.</td><td>Alta incidencia de pobreza y exposición al costo de alimentos.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ PROYECCIONES ============ -->
+<section id="proyecciones">
+  <h2><span class="num">09</span>Estado actual y proyecciones 2026–2027</h2>
+  <p class="desc">No hay consenso estrecho sobre la velocidad de la recuperación: para 2026 el REM proyecta 0,7% de crecimiento y el FMI 2,1%; para 2027 las cifras van de 2,1% a 4,0% según el pronosticador. Las proyecciones anuales no son datos observados.</p>
+
+  <div class="grid2">
+    <div class="card">
+      <h3>Crecimiento del PIB real</h3>
+      <p class="subtitle">Variación anual según cada institución. El presupuesto oficial de 2027 prevé 4,0%.</p>
+      <div class="chart" id="chart-proy-pib"></div>
+      <div class="legend" id="legend-proy-pib"></div>
+      <div class="source">Fuente: artículos 1 y 2 (WEO oct. 2026, REM 5/11/2026, OCDE, Morgan Stanley, Proyecto de Presupuesto 2027). La meta original de crecimiento 2026 era 5,4% y fue recortada.</div>
+    </div>
+    <div class="card">
+      <h3>Inflación anual</h3>
+      <p class="subtitle">Promedio anual del FMI vs. diciembre/diciembre del REM; no son directamente comparables.</p>
+      <div class="chart" id="chart-proy-inflacion"></div>
+      <div class="legend" id="legend-proy-inflacion"></div>
+      <div class="source">Fuente: artículos 1 y 2. Meta previa 2026: 10,1%; meta presupuestaria 2027: 18,0%; REM 2026: 30,36% d/d vs. 2,2% mensual observado en octubre.</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Cuadro comparativo de proyecciones</h3>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Variable</th><th class="num">2026</th><th class="num">2027</th><th>Institución y definición</th></tr></thead>
+      <tbody>
+        <tr><td>Crecimiento del PIB real</td><td class="num">2,1%</td><td class="num">3,5%</td><td>FMI, WEO oct. 2026, variación anual.</td></tr>
+        <tr><td>Crecimiento del PIB real</td><td class="num">0,7%</td><td class="num">2,1%</td><td>REM de octubre, mediana; variación del promedio anual.</td></tr>
+        <tr><td>Inflación promedio anual</td><td class="num">32,5%</td><td class="num">21,2%</td><td>FMI: no es inflación diciembre/diciembre.</td></tr>
+        <tr><td>Inflación diciembre/diciembre</td><td class="num">30,36%</td><td class="num">21,9%</td><td>REM: no comparable con el promedio anual del FMI.</td></tr>
+        <tr><td>Desempleo, promedio anual</td><td class="num">7,6%</td><td class="num">7,1%</td><td>FMI: proyección, no dato trimestral.</td></tr>
+        <tr><td>Cuenta corriente / PIB</td><td class="num">+0,6%</td><td class="num">+0,6%</td><td>FMI: cuenta corriente completa, no solo bienes.</td></tr>
+        <tr><td>Crecimiento del PIB real</td><td class="num">2,6% (OCDE)</td><td class="num">2,4% (Morgan Stanley)</td><td>Otros organismos y bancos, según artículo 2.</td></tr>
+        <tr><td>Inflación anual</td><td class="num">30,8% (Morgan Stanley)</td><td class="num">21,7% (Morgan Stanley)</td><td>Interanual a fin de año, según artículo 2.</td></tr>
+      </tbody>
+    </table></div>
+    <div class="source">Fuente: artículos 1 y 2. El REM fue relevado entre el 28 y el 30 de octubre y publicado el 5 de noviembre: expresa expectativas de analistas, no un pronóstico del BCRA.</div>
+  </div>
+
+  <div class="card">
+    <h3>Escenarios condicionales para 2027</h3>
+    <p class="subtitle">Marcos de análisis, no probabilidades calculadas ni pronósticos numéricos adicionales.</p>
+    <div class="tbl-wrap"><table>
+      <thead><tr><th>Escenario</th><th>Condiciones necesarias</th><th>Resultado esperable</th><th>Indicadores para contrastarlo</th></tr></thead>
+      <tbody>
+        <tr><td><span class="badge b-up">Recuperación más amplia</span></td><td>Continuidad fiscal, menor inflación, inversión ejecutada, crédito y recuperación de ingresos.</td><td>Mayor difusión del crecimiento hacia empleo y consumo.</td><td>Empleo formal neto, inversión fija, ventas reales y salarios medianos.</td></tr>
+        <tr><td><span class="badge b-neu">Estabilización con crecimiento débil</span></td><td>Equilibrio fiscal y exportaciones, pero mercado interno e inversión lentos.</td><td>Mejora de agregados sin alivio equivalente para todos los hogares.</td><td>Informalidad, horas trabajadas, pobreza y capacidad instalada.</td></tr>
+        <tr><td><span class="badge b-down">Interrupción del programa</span></td><td>Shock externo, tensión de financiamiento o pérdida de confianza.</td><td>Presión cambiaria, mayor inflación y menor actividad.</td><td>Reservas netas comparables, vencimientos, tasas y expectativas.</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</section>
+
+<!-- ============ BALANCE ============ -->
+<section id="balance">
+  <h2><span class="num">10</span>Balance, límites y fuentes</h2>
+
+  <div class="foot-grid">
+    <div class="card">
+      <h3 class="pos">Logros más sólidos</h3>
+      <ul class="clean">
+        <li>Desinflación de gran magnitud: 211,4% interanual en 2023 a 33,1% en octubre de 2026.</li>
+        <li>Superávit financiero del SPN sostenido en los dos primeros ejercicios completos y en 2026.</li>
+        <li>Superávit comercial de 34 meses y saldo energético récord de USD 9.427 M en 9M 2026.</li>
+        <li>Pobreza e indigencia del 1.er sem. 2026 por debajo del 2.º sem. 2023 pese al repunte reciente.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="neg">Retrocesos verificables</h3>
+      <ul class="clean">
+        <li>Pobreza de 28,2% a 32,3% entre semestres; informalidad al alza.</li>
+        <li>Caída real del salario mínimo y de la jubilación mínima con bono.</li>
+        <li>Formación bruta de capital fijo −11,1% interanual en el 2.º trimestre de 2026.</li>
+        <li>Ventas pyme y crédito al consumo débiles; morosidad familiar récord.</li>
+      </ul>
+    </div>
+    <div class="card">
+      <h3 class="warn">Tareas pendientes</h3>
+      <ul class="clean">
+        <li>Expansión sostenida de productividad, empleo formal y bienestar.</li>
+        <li>Normalización externa completa: reservas netas, riesgo país y acceso al crédito.</li>
+        <li>Materializar proyectos de inversión aprobados y traducirlos en empleo.</li>
+        <li>Resolver la disputa de medición de la canasta y la calidad del ajuste fiscal.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Notas de método y límites</h3>
+    <ul class="clean">
+      <li><strong>Fechas y revisiones:</strong> se conservan los períodos de referencia y se explicitan discrepancias entre versiones en lugar de fabricar una serie uniforme.</li>
+      <li><strong>Cobertura:</strong> pobreza, desigualdad y trabajo corresponden a los 31 aglomerados urbanos de la EPH; el dato del 1.er semestre de 2026 es provisorio.</li>
+      <li><strong>Significancia:</strong> el INDEC no encuentra cambio significativo de pobreza frente al mismo semestre de 2025, aunque sí documenta el aumento frente al semestre inmediato anterior.</li>
+      <li><strong>Cálculos propios:</strong> las tasas de PIB se encadenaron sin sumarlas y el salario mínimo se deflactó con el IPC de los mismos meses.</li>
+      <li><strong>Atribución causal:</strong> no se realizó una evaluación econométrica con contrafactual; la evolución durante un gobierno no prueba que todo el cambio haya sido causado por él.</li>
+      <li><strong>Vacíos:</strong> no hay serie homologada de reservas netas ni conciliación integral de deuda y activos públicos; tampoco medición exhaustiva de salud, educación o infraestructura.</li>
+      <li><strong>Interpretación final:</strong> estabilización significativa, socialmente costosa y todavía incompleta; el éxito duradero depende de que el equilibrio fiscal y la menor inflación se conviertan en inversión efectiva, empleo de calidad e ingresos sostenidos.</li>
+    </ul>
+  </div>
+
+  <div class="card">
+    <h3>Fuentes citadas en los artículos</h3>
+    <div class="foot-grid">
+      <div>
+        <p><strong>Artículo 1 — «Economía argentina durante el gobierno de Javier Milei»</strong> (MD y PDF)</p>
+        <ul class="clean">
+          <li><a href="https://www.indec.gob.ar/indec/Portada">INDEC</a> · <a href="https://www.indec.gob.ar/uploads/informesdeprensa/eph_pobreza_09_2670733F4C4D.pdf">Pobreza 1.er sem. 2026</a> · <a href="https://www.indec.gob.ar/ftp/cuadros/publicaciones/indecinforma/indec_informa_09_26.pdf">Mercado de trabajo</a></li>
+          <li><a href="https://www.argentina.gob.ar/node/455054">Hacienda 2024</a> · <a href="https://www.argentina.gob.ar/node/489944">Hacienda 2025</a> · <a href="https://www.argentina.gob.ar/noticias/en-septiembre-el-sector-publico-nacional-continuo-generando-resultado-financiero-1">Hacienda sep. 2026</a></li>
+          <li><a href="https://www.opc.gob.ar/wp-content/uploads/ANALISIS-DE-LA-EJECUCION-PRESUPUESTARIA-DE-LA-ADMINISTRACION-NACIONAL-SEPTIEMBRE-2026.pdf">OPC</a> · <a href="https://www.imf.org/-/media/files/publications/cr/2025/english/1argea2025001-print-pdf.pdf">FMI, evaluación ex post</a> · <a href="https://www.iae.edu.ar/2026/10/informe-economico-mensual-octubre-2026/">IAE</a></li>
+          <li><a href="https://www.bcra.gob.ar/publicaciones/relevamiento-de-expectativas-de-mercado-rem-octubre-de-2026/">BCRA, REM</a> · <a href="https://www.redcame.org.ar/prensa/574311215/index.php">CAME</a> · <a href="https://www.state.gov/reports/2026-investment-climate-statements/argentina__trashed/">Clima de inversión 2026</a></li>
+        </ul>
+      </div>
+      <div>
+        <p><strong>Artículo 2 — «Estudio Integral de la Economía Argentina bajo el Gobierno de Javier Milei»</strong> (PDF)</p>
+        <ul class="clean">
+          <li><a href="https://www.infobae.com/america/agencias/2026/11/16/el-superavit-fiscal-primario-de-argentina-crece-el-1344-interanual-en-octubre-de-2026/">Resultado fiscal oct. 2026</a> · <a href="https://chequeado.com/el-explicador/a-un-ano-del-acuerdo-con-el-fmi-como-e-volucionaron-las-principales-variables-economicas-anunciadas/">Chequeado / FMI</a></li>
+          <li><a href="https://estudiodelamo.com/inflacion-argentina-anual-mensual/">Inflación oct. 2026</a> · <a href="https://www.ellitoral.com/puerto-negocios/harinadesoja-superavitenergetico-petroleocrudo-exportaciones-vacamuerta-bcra-brent-balanzacomercial_0_IQBnH1mxUt.html">Superávit energético</a></li>
+          <li>CEPA (morosidad y salario real) · Observatorio de la Deuda Social Argentina, UCA (canasta 2017/18) · Datulis / INDEC (actividad) · Eco Go y Universidad Austral (deuda familiar)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<button id="themeToggle" class="theme-btn" type="button" aria-label="Cambiar a tema oscuro" title="Cambiar tema">
+  <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"/></svg>
+  <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2m0 16v2M4.9 4.9l1.4 1.4m11.4 11.4 1.4 1.4M2 12h2m16 0h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+  <span class="theme-label" id="themeLabel">Modo oscuro</span>
+</button>
+
+<footer>
+  <div class="inner">
+    Panel generado a partir de los documentos locales: <em>Economía argentina durante el gobierno de Javier Milei</em> (Markdown y PDF) y <em>Economía Argentina Bajo Javier Milei</em> (PDF). Gráficos SVG generados en el propio archivo: no requiere conexión ni librerías externas. Las cifras provienen de los artículos y mantienen sus fechas y coberturas originales.
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var NS = "http://www.w3.org/2000/svg";
+  var C = {};
+  function applyPalette(){
+    var cs = getComputedStyle(document.documentElement);
+    function v(name){ return cs.getPropertyValue(name).trim(); }
+    C.teal = v("--teal"); C.red = v("--red"); C.amber = v("--amber");
+    C.blue = v("--blue"); C.purple = v("--purple"); C.grey = v("--grey");
+    C.dark = v("--ink"); C.muted = v("--muted");
+    C.grid = v("--chart-grid"); C.zero = v("--chart-zero"); C.card = v("--card");
+  }
+
+  function mk(tag, attrs, parent){
+    var e = document.createElementNS(NS, tag);
+    if(attrs){ for(var k in attrs){ if(attrs[k] !== null && attrs[k] !== undefined) e.setAttribute(k, attrs[k]); } }
+    if(parent) parent.appendChild(e);
+    return e;
+  }
+  function svg(host, w, h){
+    host.innerHTML = "";
+    var s = mk("svg", {viewBox:"0 0 "+w+" "+h, preserveAspectRatio:"xMidYMid meet", role:"img"}, host);
+    return s;
+  }
+  function title(node, str){ var t = mk("title", null, node); t.textContent = str; return node; }
+  function text(s, x, y, str, o){
+    o = o || {};
+    var t = mk("text", {x:x, y:y, "font-size":o.size||12, fill:o.fill||C.muted,
+      "text-anchor":o.anchor||"start", "font-weight":o.weight||400,
+      "font-family":"-apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Arial, sans-serif"}, s);
+    t.textContent = str; return t;
+  }
+  function line(s, x1, y1, x2, y2, o){
+    o = o || {};
+    return mk("line", {x1:x1,y1:y1,x2:x2,y2:y2,stroke:o.stroke||C.grid,
+      "stroke-width":o.width||1, "stroke-dasharray":o.dash||null, opacity:o.opacity||1}, s);
+  }
+  function fmt(n, dec){
+    if(n === null || n === undefined || isNaN(n)) return "—";
+    dec = dec === undefined ? 1 : dec;
+    var neg = n < 0, a = Math.abs(n).toFixed(dec).split(".");
+    a[0] = a[0].replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    return (neg ? "−" : "") + a.join(dec ? "," : "");
+  }
+  function niceTicks(d0, d1, count){
+    var raw = (d1-d0)/count, mag = Math.pow(10, Math.floor(Math.log(raw)/Math.LN10)), norm = raw/mag;
+    var step = (norm <= 1 ? 1 : norm <= 2 ? 2 : norm <= 2.5 ? 2.5 : norm <= 5 ? 5 : 10) * mag;
+    var out = [], v = Math.ceil(d0/step)*step;
+    for(var i=0; i<40 && v <= d1 + step*0.001; i++){ out.push(Math.round(v*1000)/1000); v += step; }
+    return out;
+  }
+  function legend(id, series){
+    var host = document.getElementById(id); if(!host) return;
+    host.innerHTML = "";
+    series.forEach(function(s){
+      var sp = document.createElement("span");
+      var d = document.createElement("i"); d.className = "dot"; d.style.background = s.color;
+      sp.appendChild(d); sp.appendChild(document.createTextNode(s.name)); host.appendChild(sp);
+    });
+  }
+
+  /* Barras horizontales (permite valores negativos) */
+  function hbar(id, rows, opts){
+    var host = document.getElementById(id); if(!host) return;
+    opts = opts || {};
+    var w = 760, rowH = opts.rowH || 33, left = opts.left || 225, right = 78, top = 26, bottom = 42;
+    var h = top + rows.length*rowH + bottom;
+    var s = svg(host, w, h), vals = rows.map(function(r){return r.value;});
+    var d0 = opts.domain ? opts.domain[0] : Math.min(0, Math.min.apply(null, vals));
+    var d1 = opts.domain ? opts.domain[1] : Math.max(0, Math.max.apply(null, vals));
+    if(d1 === d0) d1 = d0 + 1;
+    if(!opts.domain){ var p = (d1-d0)*0.08; d0 -= p; d1 += p; }
+    var X = function(v){ return left + (v-d0)/(d1-d0)*(w-left-right); };
+    var ticks = opts.ticks || niceTicks(d0, d1, 5);
+    ticks.forEach(function(t){
+      var x = X(t);
+      line(s, x, top-6, x, h-bottom+6, {stroke:C.grid, width:1});
+      text(s, x, h-bottom+22, fmt(t, opts.tickDec||0), {anchor:"middle", size:10.5});
+    });
+    var zx = X(0);
+    if(d0 < 0 && d1 > 0) line(s, zx, top-8, zx, h-bottom+6, {stroke:C.zero, width:1.4});
+    rows.forEach(function(r, i){
+      var y = top + i*rowH, bh = Math.min(18, rowH-11), x = X(r.value);
+      text(s, left-12, y + rowH/2 + 4, r.label, {anchor:"end", size:11.5, fill:C.dark});
+      var rect = mk("rect", {x:Math.min(zx,x), y:y+(rowH-bh)/2, width:Math.max(1.5,Math.abs(x-zx)),
+        height:bh, rx:3, fill:r.color||C.blue}, s);
+      title(rect, r.label + ": " + fmt(r.value, opts.dec===undefined?1:opts.dec) + (opts.unit||"") + (r.note?" — "+r.note:""));
+      text(s, x + (r.value >= 0 ? 7 : -7), y + rowH/2 + 4,
+        (opts.signed ? (r.value>0?"+":"") : "") + fmt(r.value, opts.dec===undefined?1:opts.dec) + (opts.unit||""),
+        {anchor:r.value>=0?"start":"end", size:11.5, fill:C.dark, weight:600});
+    });
+  }
+
+  /* Barras verticales agrupadas */
+  function grouped(id, labels, series, opts){
+    var host = document.getElementById(id); if(!host) return;
+    opts = opts || {};
+    var w = 760, h = opts.height || 320, left = 54, right = 18, top = 24, bottom = 52;
+    var s = svg(host, w, h);
+    var all = [];
+    series.forEach(function(se){ se.data.forEach(function(v){ if(v !== null && v !== undefined) all.push(v); }); });
+    var d0 = opts.domain ? opts.domain[0] : Math.min(0, Math.min.apply(null, all));
+    var d1 = opts.domain ? opts.domain[1] : Math.max(0, Math.max.apply(null, all));
+    if(!opts.domain){ d1 += (d1-d0)*0.12; if(d0<0) d0 -= (d1-d0)*0.05; }
+    var Y = function(v){ return top + (d1-v)/(d1-d0)*(h-top-bottom); };
+    var ticks = opts.ticks || niceTicks(d0, d1, 5);
+    ticks.forEach(function(t){
+      var y = Y(t);
+      line(s, left, y, w-right, y, {stroke: t===0 ? C.zero : C.grid, width: t===0?1.4:1});
+      text(s, left-9, y+4, fmt(t, opts.tickDec||0) + (opts.axisUnit||""), {anchor:"end", size:10.5});
+    });
+    var band = (w-left-right)/labels.length, bw = Math.min(opts.barWidth||38, band/(series.length+0.8));
+    labels.forEach(function(lab, i){
+      var groupW = bw*series.length, cx = left + band*(i+0.5) - groupW/2;
+      series.forEach(function(se, k){
+        var v = se.data[i];
+        if(v === null || v === undefined) return;
+        var x = cx + k*bw, yv = Y(v), y0 = Y(0);
+        var rect = mk("rect", {x:x+1, y:Math.min(yv,y0), width:Math.max(2,bw-3),
+          height:Math.max(1.5,Math.abs(y0-yv)), rx:2, fill:se.color}, s);
+        title(rect, (se.name ? se.name+" · " : "") + lab + ": " + fmt(v, opts.dec===undefined?1:opts.dec) + (opts.unit||""));
+        if(opts.showValues !== false){
+          text(s, x+bw/2, v>=0 ? yv-6 : yv+14, fmt(v, opts.dec===undefined?1:opts.dec),
+            {anchor:"middle", size:10, fill:C.dark, weight:600});
+        }
+      });
+      text(s, left + band*(i+0.5), h-bottom+20, lab, {anchor:"middle", size:10.5, fill:C.dark});
+    });
+  }
+
+  /* Líneas */
+  function lineChart(id, labels, series, opts){
+    var host = document.getElementById(id); if(!host) return;
+    opts = opts || {};
+    var w = 760, h = opts.height || 320, left = opts.left || 56, right = 22, top = 24, bottom = 52;
+    var s = svg(host, w, h);
+    var all = [];
+    series.forEach(function(se){ se.data.forEach(function(v){ if(v !== null && v !== undefined) all.push(v); }); });
+    var d0 = opts.domain ? opts.domain[0] : Math.min.apply(null, all);
+    var d1 = opts.domain ? opts.domain[1] : Math.max.apply(null, all);
+    if(!opts.domain){ var p=(d1-d0)*0.12; d0 = Math.max(0,d0-p); d1 += p; }
+    var X = function(i){ return labels.length===1 ? (left+(w-left-right)/2) : left + i*(w-left-right)/(labels.length-1); };
+    var Y = function(v){ return top + (d1-v)/(d1-d0)*(h-top-bottom); };
+    var ticks = opts.ticks || niceTicks(d0, d1, 5);
+    ticks.forEach(function(t){
+      var y = Y(t);
+      line(s, left, y, w-right, y, {stroke:C.grid});
+      text(s, left-9, y+4, fmt(t, opts.tickDec||0), {anchor:"end", size:10.5});
+    });
+    labels.forEach(function(lab, i){
+      var anchor = labels.length > 3 ? (i === 0 ? "start" : (i === labels.length-1 ? "end" : "middle")) : "middle";
+      text(s, X(i), h-bottom+20, lab, {anchor:anchor, size:10.5, fill:C.dark});
+    });
+    series.forEach(function(se){
+      var seg = [], flush = function(){
+        if(seg.length > 1){
+          var d = seg.map(function(p,i){ return (i?"L":"M") + fmt(p[0],2).replace(",",".") + " " + fmt(p[1],2).replace(",","."); }).join(" ");
+          var path = mk("path", {d:d, fill:"none", stroke:se.color, "stroke-width":2.4,
+            "stroke-linejoin":"round", "stroke-linecap":"round", "stroke-dasharray":se.dash||null}, s);
+        }
+        seg = [];
+      };
+      se.data.forEach(function(v,i){
+        if(v === null || v === undefined){ flush(); return; }
+        seg.push([X(i), Y(v)]);
+      });
+      flush();
+      se.data.forEach(function(v,i){
+        if(v === null || v === undefined) return;
+        var c = mk("circle", {cx:X(i), cy:Y(v), r:4.2, fill:C.card, stroke:se.color, "stroke-width":2.2}, s);
+        title(c, (se.name?se.name+": ":"") + labels[i] + " = " + fmt(v, opts.dec===undefined?1:opts.dec) + (opts.unit||""));
+        if(opts.showValues !== false){
+          text(s, X(i), Y(v)-11, fmt(v, opts.dec===undefined?1:opts.dec), {anchor:"middle", size:10.5, fill:C.dark, weight:600});
+        }
+      });
+    });
+  }
+
+  /* Combinado: barras (eje izq.) + línea (eje der.) */
+  function combo(id, labels, bars, lines, opts){
+    var host = document.getElementById(id); if(!host) return;
+    opts = opts || {};
+    var w = 760, h = 330, left = 50, right = 50, top = 26, bottom = 50;
+    var s = svg(host, w, h), bd = opts.barDomain, ld = opts.lineDomain;
+    var Yb = function(v){ return top + (bd[1]-v)/(bd[1]-bd[0])*(h-top-bottom); };
+    var Yl = function(v){ return top + (ld[1]-v)/(ld[1]-ld[0])*(h-top-bottom); };
+    niceTicks(bd[0], bd[1], 5).forEach(function(t){
+      line(s, left, Yb(t), w-right, Yb(t), {stroke:C.grid});
+      text(s, left-8, Yb(t)+4, fmt(t,0)+"%", {anchor:"end", size:10});
+    });
+    niceTicks(ld[0], ld[1], 5).forEach(function(t){
+      text(s, w-right+8, Yl(t)+4, fmt(t,0)+"%", {anchor:"start", size:10, fill:C.purple});
+    });
+    var band = (w-left-right)/labels.length, bw = Math.min(40, band*0.52);
+    labels.forEach(function(lab,i){
+      var v = bars.data[i], cx = left+band*(i+0.5), y = Yb(v);
+      var rect = mk("rect", {x:cx-bw/2, y:y, width:bw, height:Math.max(2,Yb(0)-y), rx:3, fill:bars.color}, s);
+      title(rect, bars.name + " · " + lab + ": " + fmt(v,1) + "%");
+      text(s, cx, y-6, fmt(v,1), {anchor:"middle", size:10.5, fill:C.dark, weight:600});
+      text(s, cx, h-bottom+19, lab, {anchor:"middle", size:10.5, fill:C.dark});
+    });
+    lines.forEach(function(se){
+      var pts = [];
+      se.data.forEach(function(v,i){ if(v !== null && v !== undefined) pts.push([left+band*(i+0.5), Yl(v), i, v]); });
+      if(pts.length>1){
+        var d = pts.map(function(p,i){ return (i?"L":"M")+p[0]+" "+p[1]; }).join(" ");
+        mk("path", {d:d, fill:"none", stroke:se.color, "stroke-width":2.4, "stroke-linejoin":"round"}, s);
+      }
+      pts.forEach(function(p){
+        var c = mk("circle", {cx:p[0], cy:p[1], r:4.2, fill:C.card, stroke:se.color, "stroke-width":2.2}, s);
+        title(c, se.name + " · " + labels[p[2]] + ": " + fmt(p[3],1) + "%");
+        text(s, p[0]+7, p[1]-8, fmt(p[3],1), {anchor:"start", size:10, fill:C.purple, weight:600});
+      });
+    });
+  }
+
+  /* ---------- Gráficos (se redibujan al cambiar de tema) ---------- */
+  function renderCharts(){
+  combo("chart-inflacion",
+    ["Dic 23","Dic 24","Dic 25","Ago 26","Sep 26","Oct 26"],
+    {name:"Inflación mensual", color:C.blue, data:[25.5,2.7,2.8,1.7,1.9,2.2]},
+    [{name:"Inflación interanual", color:C.purple, data:[211.4,117.8,31.5,null,null,33.1]}],
+    {barDomain:[0,28], lineDomain:[0,220]});
+
+  hbar("chart-metas", [
+    {label:"Meta 2025 (punta a punta)", value:18.3, color:C.grey},
+    {label:"Observado 2025", value:31.5, color:C.red},
+    {label:"Meta inicial 2026", value:10.1, color:C.grey},
+    {label:"Observado 2026 (ene.–oct.)", value:26.3, color:C.amber}
+  ], {domain:[0,35], unit:"%", dec:1, ticks:[0,10,20,30]});
+
+  grouped("chart-fiscal", ["2023","2024","2025","2026 (ene.–oct.)"], [
+    {name:"Resultado primario", color:C.teal, data:[-2.9,1.8,1.4,1.4]},
+    {name:"Resultado financiero", color:C.blue, data:[-6.1,0.3,0.2,0.4]}
+  ], {domain:[-7,2.5], ticks:[-6,-4,-2,0,2], unit:"% del PIB", dec:1, tickDec:0});
+
+  hbar("chart-gasto", [
+    {label:"Inversión real directa", value:-24.5, color:C.red},
+    {label:"Gasto de capital", value:-19.4, color:C.red},
+    {label:"Haber mínimo con bono", value:-5.1, color:C.amber},
+    {label:"Prestaciones sociales", value:-2.3, color:C.red},
+    {label:"Jubilaciones y pensiones", value:0.5, color:C.teal}
+  ], {domain:[-30,5], unit:"%", dec:1, ticks:[-30,-20,-10,0,5]});
+  legend("legend-fiscal", [{name:"Resultado primario",color:C.teal},{name:"Resultado financiero",color:C.blue}]);
+
+  hbar("chart-pib", [
+    {label:"2023 (observado)", value:-1.6, color:C.grey, note:"serie financiera"},
+    {label:"2024 (observado)", value:-1.7, color:C.grey},
+    {label:"2025 (observado)", value:4.5, color:C.blue, note:"art. 1: 4,4%"},
+    {label:"2026 · REM", value:0.7, color:C.amber, note:"proyección"},
+    {label:"2026 · FMI", value:2.1, color:C.amber, note:"proyección"},
+    {label:"2027 · REM", value:2.1, color:C.amber, note:"proyección"},
+    {label:"2027 · FMI", value:3.5, color:C.amber, note:"proyección"}
+  ], {domain:[-3,5], unit:"%", dec:1, ticks:[-3,-2,-1,0,1,2,3,4,5], left:170});
+
+  hbar("chart-demanda", [
+    {label:"Exportaciones", value:13.7, color:C.teal},
+    {label:"Consumo privado", value:0.4, color:C.blue},
+    {label:"Consumo público", value:-4.1, color:C.red},
+    {label:"Importaciones", value:-8.6, color:C.red},
+    {label:"Formación bruta de capital fijo", value:-11.1, color:C.red}
+  ], {domain:[-14,16], unit:"%", dec:1, ticks:[-10,-5,0,5,10,15], left:230});
+
+  hbar("chart-actividad", [
+    {label:"PIB (2.º trim. 2026)", value:2.0, color:C.blue},
+    {label:"EMAE (ago. 2026)", value:-1.7, color:C.red},
+    {label:"Industria (sep. 2026)", value:-1.8, color:C.red},
+    {label:"Utilización de capacidad", value:-1.3, color:C.amber, note:"puntos porcentuales"},
+    {label:"Construcción (ago. 2026)", value:-4.4, color:C.red}
+  ], {domain:[-6,4], unit:"%", dec:1, ticks:[-6,-4,-2,0,2,4]});
+
+  lineChart("chart-pobreza", ["2S 23","1S 24","2S 24","1S 25","2S 25","1S 26"], [
+    {name:"Pobreza", color:C.red, data:[41.7,52.9,38.1,31.6,28.2,32.3]},
+    {name:"Indigencia", color:C.amber, data:[11.9,18.1,8.2,6.9,6.3,7.5]}
+  ], {domain:[0,60], unit:"%", dec:1, ticks:[0,10,20,30,40,50,60]});
+  legend("legend-pobreza", [{name:"Pobreza",color:C.red},{name:"Indigencia",color:C.amber}]);
+
+  grouped("chart-uca", ["2T 2025","2T 2026"], [
+    {name:"Oficial trimestral", color:C.blue, data:[31.8,34.4]},
+    {name:"UCA variante V1", color:C.amber, data:[35.3,37.5]},
+    {name:"UCA variante V2", color:C.red, data:[39.5,42.4]}
+  ], {domain:[0,50], ticks:[0,10,20,30,40,50], unit:"%", dec:1});
+  legend("legend-uca", [{name:"Oficial trimestral",color:C.blue},{name:"UCA V1 (moderada)",color:C.amber},{name:"UCA V2 (exigente)",color:C.red}]);
+
+  grouped("chart-empleo", ["Actividad","Empleo","Desempleo","Informalidad","Subocupación"], [
+    {name:"2.º trim. 2025", color:C.grey, data:[48.1,44.5,7.6,43.2,11.6]},
+    {name:"2.º trim. 2026", color:C.blue, data:[48.9,45.0,7.9,45.0,11.5]}
+  ], {domain:[0,55], ticks:[0,10,20,30,40,50], unit:"%", dec:1});
+  legend("legend-empleo", [{name:"2.º trim. 2025",color:C.grey},{name:"2.º trim. 2026",color:C.blue}]);
+
+  hbar("chart-salarios", [
+    {label:"IPC de septiembre", value:1.9, color:C.amber, note:"referencia"},
+    {label:"Privado registrado", value:1.9, color:C.teal},
+    {label:"Sector público", value:1.8, color:C.blue},
+    {label:"Índice salarial general", value:1.3, color:C.grey},
+    {label:"Privado no registrado", value:-0.8, color:C.red}
+  ], {domain:[-2,2.5], unit:"%", dec:1, ticks:[-2,-1,0,1,2], left:190});
+
+  hbar("chart-ingresos", [
+    {label:"Mínima c/ bono (mar. 2024 → sep. 2026)", value:-47.3, color:C.red, left:250},
+    {label:"Salario mínimo real (nov. 2023 → ago. 2026)", value:-40.8, color:C.red},
+    {label:"Salario real c/ canasta actualizada", value:-17.6, color:C.amber},
+    {label:"Jubilación media (nov. 2023 → sep. 2026)", value:-12.7, color:C.amber},
+    {label:"Salario real c/ IPC oficial", value:-7.0, color:C.grey}
+  ], {domain:[-55,5], unit:"%", dec:1, ticks:[-50,-40,-30,-20,-10,0], left:290});
+
+  lineChart("chart-reservas", ["2023","2024","2025","2026"], [
+    {name:"Reservas brutas", color:C.teal, data:[20905,29859,41015,49464]}
+  ], {domain:[0,55000], ticks:[0,10000,20000,30000,40000,50000], dec:0, tickDec:0,
+      unit:" USD M", height:300});
+
+  lineChart("chart-riesgo", ["Nov 23","Nov 25","Mín. 2026","Ago 26","Oct 26","6 Nov","13–16 Nov"], [
+    {name:"EMBI+", color:C.red, data:[2495,616,402,472,597,939,830]}
+  ], {domain:[0,2600], ticks:[0,500,1000,1500,2000,2500], dec:0, tickDec:0,
+      unit:" pb", height:300});
+
+  hbar("chart-energia", [
+    {label:"2024", value:2758, color:C.blue},
+    {label:"2025", value:7815, color:C.teal},
+    {label:"2026 (ene.–sep.)", value:9427, color:C.teal}
+  ], {domain:[0,11000], dec:0, tickDec:0, unit:" USD M", ticks:[0,2000,4000,6000,8000,10000], left:150, leftPad:0});
+
+  hbar("chart-came", [
+    {label:"Calzado y marroquinería", value:3.6, color:C.teal},
+    {label:"Textil e indumentaria", value:3.6, color:C.teal},
+    {label:"Perfumería", value:0.8, color:C.blue},
+    {label:"Bazar y muebles", value:-0.5, color:C.red},
+    {label:"Ferretería y construcción", value:-3.4, color:C.red},
+    {label:"Alimentos y bebidas", value:-3.5, color:C.red},
+    {label:"Farmacia", value:-3.7, color:C.red}
+  ], {domain:[-5,5], unit:"%", dec:1, ticks:[-4,-2,0,2,4], left:205});
+
+  grouped("chart-morosidad", ["Bancos","No bancos / billeteras"], [
+    {name:"2024 (oct.–nov.)", color:C.grey, data:[2.5,7.3]},
+    {name:"Septiembre 2026", color:C.red, data:[12.2,34.6]}
+  ], {domain:[0,40], ticks:[0,10,20,30,40], unit:"%", dec:1});
+  legend("legend-morosidad", [{name:"2024 (oct.–nov.)",color:C.grey},{name:"Septiembre 2026",color:C.red}]);
+
+  grouped("chart-proy-pib", ["2026","2027"], [
+    {name:"REM (BCRA)", color:C.blue, data:[0.7,2.1]},
+    {name:"FMI (WEO)", color:C.teal, data:[2.1,3.5]},
+    {name:"OCDE / Morgan Stanley", color:C.purple, data:[2.6,2.4]},
+    {name:"Presupuesto oficial", color:C.amber, data:[null,4.0]}
+  ], {domain:[0,4.5], ticks:[0,1,2,3,4], unit:"%", dec:1});
+  legend("legend-proy-pib", [{name:"REM (BCRA)",color:C.blue},{name:"FMI (WEO)",color:C.teal},
+    {name:"OCDE 2026 / Morgan Stanley 2027",color:C.purple},{name:"Presupuesto oficial 2027",color:C.amber}]);
+
+  grouped("chart-proy-inflacion", ["2026","2027"], [
+    {name:"FMI (promedio anual)", color:C.blue, data:[32.5,21.2]},
+    {name:"REM (dic./dic.)", color:C.purple, data:[30.36,21.9]},
+    {name:"Meta / presupuesto", color:C.amber, data:[10.1,18.0]},
+    {name:"Observado acum. ene.–oct.", color:C.grey, data:[26.3,null]}
+  ], {domain:[0,38], ticks:[0,10,20,30], unit:"%", dec:1});
+  legend("legend-proy-inflacion", [{name:"FMI (promedio anual)",color:C.blue},{name:"REM (dic./dic.)",color:C.purple},
+    {name:"Meta 2026 / presupuesto 2027",color:C.amber},{name:"Observado 2026 (ene.–oct.)",color:C.grey}]);
+  }
+
+  /* ---------- Tema claro / oscuro ---------- */
+  var STORAGE_KEY = "economia-panel-theme";
+  function setTheme(theme, persist){
+    document.documentElement.setAttribute("data-theme", theme);
+    applyPalette();
+    renderCharts();
+    var btn = document.getElementById("themeToggle");
+    var lbl = document.getElementById("themeLabel");
+    if(btn) btn.setAttribute("aria-label", theme === "dark" ? "Cambiar a tema claro" : "Cambiar a tema oscuro");
+    if(lbl) lbl.textContent = theme === "dark" ? "Modo claro" : "Modo oscuro";
+    if(persist){ try{ localStorage.setItem(STORAGE_KEY, theme); }catch(e){} }
+  }
+  var stored = null;
+  try{ stored = localStorage.getItem(STORAGE_KEY); }catch(e){}
+  var initial = stored || (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light");
+  setTheme(initial, false);
+  var themeBtn = document.getElementById("themeToggle");
+  if(themeBtn) themeBtn.addEventListener("click", function(){
+    var current = document.documentElement.getAttribute("data-theme") === "dark" ? "dark" : "light";
+    setTheme(current === "dark" ? "light" : "dark", true);
+  });
+})();
+</script>
+</body>
+</html>
